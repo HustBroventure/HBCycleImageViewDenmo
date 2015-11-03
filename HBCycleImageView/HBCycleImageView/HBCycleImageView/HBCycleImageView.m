@@ -6,6 +6,13 @@
 //  Copyright (c) 2015年 HustBroventurre. All rights reserved.
 //
 
+/**
+ *  
+ *
+ *  方式1.在didScroll中判断offset，<0或者>max则无动画移动，bounce为YES
+ *
+ *
+ */
 #import "HBCycleImageView.h"
 @interface HBCycleImageView()<UIScrollViewDelegate>
 @property (nonatomic, strong) UIScrollView* scrollView;
@@ -43,9 +50,10 @@
             //添加ImageView
         [self addImageviewsWithImages:imageArray];
             //添加timer
-        [self addTimerLoop];
+            [self addTimerLoop];
 
         [self addSubview:self.pageControl];
+            //_scrollView.bounces = NO;
 
 
     }
@@ -93,6 +101,7 @@
 }
 -(void) changeOffset{
 
+     NSLog(@"%s",__func__);
     _currentPage ++;
 
     if (_currentPage == _imageViewArray.count + 1) {
@@ -118,7 +127,7 @@
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc]initWithFrame:self.bounds];
         _scrollView.showsVerticalScrollIndicator = NO;
-        _scrollView.showsHorizontalScrollIndicator = NO;
+            //_scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.pagingEnabled = YES;
         _scrollView.delegate = self;
     }
@@ -145,26 +154,45 @@
 }
 
 #pragma mark - delegate methords
+    // 手放上去，准备滑拖动
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+        //NSLog(@"%s",__func__);
+}
+    // 手准备放开
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+        //NSLog(@"%s",__func__);
+
+}
+    // 手完全放开
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+        //NSLog(@"%s",__func__);
+
+}
+    // 手放开后开始逐渐减速
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
+{
+        //NSLog(@"%s",__func__);
+
+}
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    
+        // NSLog(@"%s",__func__);
+
     NSInteger currentPage = scrollView.contentOffset.x / _widthOfView;
 
     if(currentPage == 0){
-        _scrollView.contentOffset = CGPointMake(_widthOfView * _imageViewArray.count, 0);
         _pageControl.currentPage = _imageViewArray.count;
         _currentPage = _imageViewArray.count;
     }
-
     if (_currentPage + 1 == currentPage || currentPage == 1) {
         _currentPage = currentPage;
 
         if (_currentPage == _imageViewArray.count + 1) {
             _currentPage = 1;
         }
-
-        if (_currentPage == _imageViewArray.count) {
-            _scrollView.contentOffset = CGPointMake(0, 0);
-        }
-
         _pageControl.currentPage = _currentPage - 1;
         [self resumeTimer];
         return;
@@ -176,10 +204,10 @@
 {
     if (scrollView.contentOffset.x < 0) {
         [_scrollView setContentOffset:CGPointMake(_imageViewArray.count*_widthOfView, 0) animated:NO];
-    }
+           }
     if (scrollView.contentOffset.x > _imageViewArray.count*_widthOfView) {
-
          [_scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
+       
     }
 
 }
