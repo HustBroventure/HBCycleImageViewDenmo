@@ -6,17 +6,10 @@
 //  Copyright (c) 2015年 HustBroventurre. All rights reserved.
 //
 
-/**
- *  
- *
- *  方式1.在didScroll中判断offset，<0或者>max则无动画移动，bounce为YES
- *
- *
- */
 #import "HBCycleImageView.h"
+#import "UIButton+AFNetworking.h"
 @interface HBCycleImageView()<UIScrollViewDelegate>
 @property (nonatomic, strong) UIScrollView* scrollView;
-@property (nonatomic, strong) UIPageControl *pageControl;
 @property (nonatomic, strong) NSArray *imageViewArray;
 @property (nonatomic, strong) NSTimer *timer;
 
@@ -34,33 +27,42 @@
 -(instancetype)initWithFrame:(CGRect)frame imageArray:(NSArray *)imageArray
 {
     if(self = [super initWithFrame:frame]){
-            //宽度
-        _widthOfView = frame.size.width;
-            //高度
-        _heightView = frame.size.height;
         _imageViewArray = imageArray;
-        _timeInterval = 2;
-
-            //当前显示页面
-        _currentPage = 1;
-        self.clipsToBounds = YES;
-            //初始化滚动视图
-        [self addSubview:self.scrollView];
-
-            //添加ImageView
-        [self addImageviewsWithImages:imageArray];
-            //添加timer
-            [self addTimerLoop];
-
-        [self addSubview:self.pageControl];
-            //_scrollView.bounces = NO;
-
-
+        [self commonInit];
     }
     return self;
 }
-
+-(instancetype)initWithFrame:(CGRect)frame imageURLArray:(NSArray *)imageURLArray
+{
+    if(self = [super initWithFrame:frame]){
+        _imageViewArray = imageURLArray;
+        [self commonInit];
+    }
+    return self;
+}
 #pragma mark - private-tools methords
+-(void)commonInit
+{
+        //宽度
+    _widthOfView = self.frame.size.width;
+        //高度
+    _heightView = self.frame.size.height;
+    
+    _timeInterval = 2;
+    
+        //当前显示页面
+    _currentPage = 1;
+    self.clipsToBounds = YES;
+        //初始化滚动视图
+    [self addSubview:self.scrollView];
+    
+        //添加ImageView
+    [self addImageviewsWithImages:_imageViewArray];
+        //添加timer
+    [self addTimerLoop];
+    [self addSubview:self.pageControl];
+
+}
 - (void)addImageviewsWithImages:(NSArray*)imageArray
 {
     NSInteger count = imageArray.count;
@@ -72,8 +74,14 @@
 
     for (int i = 0; i < count; i++) {
         UIButton* item = [self createButtonItem];
-        [item setBackgroundImage:imageArray[i] forState:UIControlStateNormal];
+        
         item.tag = i;
+        if ([imageArray[i] isKindOfClass:[UIImage class]]) {
+            [item setBackgroundImage:imageArray[i] forState:UIControlStateNormal];
+        }else{
+            NSURL* URL = [NSURL URLWithString:imageArray[i]];
+            [item setBackgroundImageForState:UIControlStateNormal withURL:URL placeholderImage:self.placeHolderImage];
+        }
         item.frame = CGRectMake((i+1)*_widthOfView, 0, _widthOfView, _heightView);
         [self.scrollView addSubview:item];
     }
@@ -93,17 +101,16 @@
     [button addTarget:self action:@selector(click:) forControlEvents:UIControlEventTouchUpInside];
     return button;
 }
-- (void) addTimerLoop{
+- (void) addTimerLoop
+{
 
     if (_timer == nil) {
         _timer = [NSTimer scheduledTimerWithTimeInterval:_timeInterval target:self selector:@selector(changeOffset) userInfo:nil repeats:YES];
     }
 }
--(void) changeOffset{
-
-     NSLog(@"%s",__func__);
+-(void) changeOffset
+{
     _currentPage ++;
-
     if (_currentPage == _imageViewArray.count + 1) {
         _currentPage = 1;
     }
@@ -116,7 +123,6 @@
             [_scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
         }
     }];
-
     _pageControl.currentPage = _currentPage - 1;
 
 }
@@ -127,7 +133,7 @@
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc]initWithFrame:self.bounds];
         _scrollView.showsVerticalScrollIndicator = NO;
-            //_scrollView.showsHorizontalScrollIndicator = NO;
+        _scrollView.showsHorizontalScrollIndicator = NO;
         _scrollView.pagingEnabled = YES;
         _scrollView.delegate = self;
     }
@@ -154,35 +160,10 @@
 }
 
 #pragma mark - delegate methords
-    // 手放上去，准备滑拖动
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-        //NSLog(@"%s",__func__);
-}
-    // 手准备放开
-- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
-{
-        //NSLog(@"%s",__func__);
 
-}
-    // 手完全放开
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-        //NSLog(@"%s",__func__);
-
-}
-    // 手放开后开始逐渐减速
-- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
-{
-        //NSLog(@"%s",__func__);
-
-}
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     
-        // NSLog(@"%s",__func__);
-
     NSInteger currentPage = scrollView.contentOffset.x / _widthOfView;
-
     if(currentPage == 0){
         _pageControl.currentPage = _imageViewArray.count;
         _currentPage = _imageViewArray.count;
@@ -217,7 +198,6 @@
     if (![_timer isValid]) {
         return ;
     }
-
     [_timer setFireDate:[NSDate dateWithTimeIntervalSinceNow:_timeInterval-0.1]];
 
 }
