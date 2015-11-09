@@ -18,7 +18,6 @@
 @implementation HBCycleImageView
 {
      CGFloat _widthOfView;
-
      CGFloat _heightView;
     NSInteger _currentPage;
 
@@ -32,14 +31,7 @@
     }
     return self;
 }
--(instancetype)initWithFrame:(CGRect)frame imageURLArray:(NSArray *)imageURLArray
-{
-    if(self = [super initWithFrame:frame]){
-        _imageViewArray = imageURLArray;
-        [self commonInit];
-    }
-    return self;
-}
+
 #pragma mark - private-tools methords
 -(void)commonInit
 {
@@ -47,9 +39,7 @@
     _widthOfView = self.frame.size.width;
         //高度
     _heightView = self.frame.size.height;
-    
     _timeInterval = 2;
-    
         //当前显示页面
     _currentPage = 1;
     self.clipsToBounds = YES;
@@ -59,8 +49,8 @@
         //添加ImageView
     [self addImageviewsWithImages:_imageViewArray];
         //添加timer
-    [self addTimerLoop];
-    [self addSubview:self.pageControl];
+        [self addTimerLoop];
+        [self addSubview:self.pageControl];
 
 }
 - (void)addImageviewsWithImages:(NSArray*)imageArray
@@ -83,6 +73,7 @@
             [item setBackgroundImageForState:UIControlStateNormal withURL:URL placeholderImage:self.placeHolderImage];
         }
         item.frame = CGRectMake((i+1)*_widthOfView, 0, _widthOfView, _heightView);
+        item.adjustsImageWhenHighlighted = NO;
         [self.scrollView addSubview:item];
     }
 
@@ -90,6 +81,7 @@
     [itemZero setBackgroundImage:imageArray[count-1] forState:UIControlStateNormal];
     itemZero.tag = count-1;
     itemZero.frame = CGRectMake(0, 0, _widthOfView, _heightView);
+    itemZero.adjustsImageWhenHighlighted = NO;
     [self.scrollView addSubview:itemZero];
 
 
@@ -110,7 +102,7 @@
 }
 -(void) changeOffset
 {
-    _currentPage ++;
+    _currentPage++;
     if (_currentPage == _imageViewArray.count + 1) {
         _currentPage = 1;
     }
@@ -119,7 +111,6 @@
         _scrollView.contentOffset = CGPointMake(_widthOfView * _currentPage, 0);
     } completion:^(BOOL finished) {
         if (_currentPage == _imageViewArray.count) {
-                //_scrollView.contentOffset = CGPointMake(0, 0);
             [_scrollView setContentOffset:CGPointMake(0, 0) animated:NO];
         }
     }];
@@ -161,26 +152,18 @@
 
 #pragma mark - delegate methords
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
     NSInteger currentPage = scrollView.contentOffset.x / _widthOfView;
+    _currentPage = currentPage;
+    _pageControl.currentPage = _currentPage-1;
     if(currentPage == 0){
-        _pageControl.currentPage = _imageViewArray.count;
-        _currentPage = _imageViewArray.count;
+        _pageControl.currentPage = _imageViewArray.count-1;
     }
-    if (_currentPage + 1 == currentPage || currentPage == 1) {
-        _currentPage = currentPage;
-
-        if (_currentPage == _imageViewArray.count + 1) {
-            _currentPage = 1;
-        }
-        _pageControl.currentPage = _currentPage - 1;
-        [self resumeTimer];
-        return;
-    }
-
+    [self resumeTimer];
 
 }
+
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (scrollView.contentOffset.x < 0) {

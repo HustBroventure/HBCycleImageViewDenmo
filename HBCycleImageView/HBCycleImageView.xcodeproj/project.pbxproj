@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A5C3ED81BF0728C00BC35F2 /* HBReuseCycleImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5C3ED71BF0728C00BC35F2 /* HBReuseCycleImageView.m */; };
 		0A6179871BEC7B65009470EB /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A6179751BEC7B65009470EB /* AFHTTPRequestOperation.m */; };
 		0A6179881BEC7B65009470EB /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A6179771BEC7B65009470EB /* AFHTTPRequestOperationManager.m */; };
 		0A6179891BEC7B65009470EB /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A6179791BEC7B65009470EB /* AFHTTPSessionManager.m */; };
@@ -48,6 +49,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A5C3ED61BF0728C00BC35F2 /* HBReuseCycleImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBReuseCycleImageView.h; sourceTree = "<group>"; };
+		0A5C3ED71BF0728C00BC35F2 /* HBReuseCycleImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBReuseCycleImageView.m; sourceTree = "<group>"; };
 		0A6179741BEC7B65009470EB /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		0A6179751BEC7B65009470EB /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		0A6179761BEC7B65009470EB /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -242,6 +245,8 @@
 			children = (
 				0AD8099D1BE79BE400F94D95 /* HBCycleImageView.h */,
 				0AD8099E1BE79BE400F94D95 /* HBCycleImageView.m */,
+				0A5C3ED61BF0728C00BC35F2 /* HBReuseCycleImageView.h */,
+				0A5C3ED71BF0728C00BC35F2 /* HBReuseCycleImageView.m */,
 			);
 			path = HBCycleImageView;
 			sourceTree = "<group>";
@@ -381,6 +386,7 @@
 				0A6179A61BEC7B6D009470EB /* UIButton+AFNetworking.m in Sources */,
 				0A6179A91BEC7B6D009470EB /* UIRefreshControl+AFNetworking.m in Sources */,
 				0A6179A51BEC7B6D009470EB /* UIAlertView+AFNetworking.m in Sources */,
+				0A5C3ED81BF0728C00BC35F2 /* HBReuseCycleImageView.m in Sources */,
 				0AD8097F1BE79B8B00F94D95 /* ViewController.m in Sources */,
 				0A61798B1BEC7B65009470EB /* AFSecurityPolicy.m in Sources */,
 				0AD8099F1BE79BE400F94D95 /* HBCycleImageView.m in Sources */,

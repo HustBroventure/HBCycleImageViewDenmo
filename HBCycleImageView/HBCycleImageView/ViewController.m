@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "HBCycleImageView.h"
+#import "HBReuseCycleImageView.h"
 @interface ViewController ()
 
 @end
@@ -19,6 +20,10 @@
     HBCycleImageView* view = [[HBCycleImageView alloc]initWithFrame:CGRectMake(0, 100, 375, 200) imageArray:@[[UIImage imageNamed:@"01.jpg"],[UIImage imageNamed:@"02.jpg"],[UIImage imageNamed:@"03.jpg"]]];
 
     [self.view addSubview:view];
+    HBReuseCycleImageView* view2 = [[HBReuseCycleImageView alloc]initWithFrame:CGRectMake(0, 350, 375, 200) imageArray:@[[UIImage imageNamed:@"01.jpg"],[UIImage imageNamed:@"02.jpg"],[UIImage imageNamed:@"03.jpg"]]];
+    
+    [self.view addSubview:view2];
+
 }
 
 
